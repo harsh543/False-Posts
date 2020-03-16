@@ -25,9 +25,7 @@ matplotlib==2.1.2
 networkx==2.1
 numpy==1.14.0
 pandas==0.22.0
-Pillow==5.0.0
 procname==0.3
-protonmail==0.0.4
 pyasn1==0.4.7
 pybind11==2.4.3
 pyparsing==2.2.0
