@@ -34,7 +34,7 @@ PyWavelets==0.5.2
 PyYAML==5.1.2
 regex==2020.2.20
 requests==2.21.0
-rsa==3.4.2
+rsa==4.1
 s3transfer==0.3.3
 sacremoses==0.0.38
 scikit-image==0.13.1
