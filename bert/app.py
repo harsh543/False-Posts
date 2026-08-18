@@ -75,7 +75,7 @@ if __name__ == "__main__":
     state_dict = checkpoint.get("state_dict", checkpoint)
     if any(key.startswith("module.") for key in state_dict):
         state_dict = {
-            key.replace("module.", "", 1): value
+            key.removeprefix("module."): value
             for key, value in state_dict.items()
         }
     MODEL.module.load_state_dict(state_dict)
