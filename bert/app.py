@@ -18,21 +18,18 @@ def sentence_prediction(sentence, model):
     review = str(sentence)
     review = " ".join(review.split())
 
-    inputs = tokenizer.encode_plus(
+    inputs = tokenizer(
         review,
-        None,
         add_special_tokens=True,
-        max_length=max_len
+        max_length=max_len,
+        padding="max_length",
+        truncation=True,
+        return_token_type_ids=True
     )
 
     ids = inputs["input_ids"]
     mask = inputs["attention_mask"]
     token_type_ids = inputs["token_type_ids"]
-
-    padding_length = max_len - len(ids)
-    ids = ids + ([0] * padding_length)
-    mask = mask + ([0] * padding_length)
-    token_type_ids = token_type_ids + ([0] * padding_length)
 
     ids = torch.tensor(ids, dtype=torch.long).unsqueeze(0)
     mask = torch.tensor(mask, dtype=torch.long).unsqueeze(0)
@@ -70,9 +67,9 @@ if __name__ == "__main__":
     MODEL = BERTBaseUncased()
     MODEL = nn.DataParallel(MODEL)
     if torch.cuda.is_available():
-      map_location=lambda storage, loc: storage.cuda()
+      map_location = lambda storage, loc: storage.cuda()
     else:
-      map_location='cpu'
+      map_location = 'cpu'
     
     MODEL.load_state_dict(torch.load(config.MODEL_PATH, map_location))
     MODEL.to(DEVICE)

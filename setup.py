@@ -17,13 +17,23 @@ DESCRIPTION = 'A project to stop spreading false news on social media with help 
 URL = 'https://github.com/harsh543/False-Posts'
 EMAIL = ''
 AUTHOR = 'Awesome Soul'
-REQUIRES_PYTHON = '>=3.6.0'
+REQUIRES_PYTHON = '>=3.9.0'
 VERSION = '0.1.0'
 
+here = os.path.abspath(os.path.dirname(__file__))
+
 # What packages are required for this module to be executed?
-REQUIRED = [
-    'transformers==2.4.1'
-]
+def load_requirements():
+    requirements_path = os.path.join(here, 'requirements.txt')
+    with io.open(requirements_path, encoding='utf-8') as requirements_file:
+        return [
+            line.strip()
+            for line in requirements_file
+            if line.strip() and not line.startswith('#')
+        ]
+
+
+REQUIRED = load_requirements()
 
 # What packages are optional?
 EXTRAS = {
@@ -34,8 +44,6 @@ EXTRAS = {
 # ------------------------------------------------
 # Except, perhaps the License and Trove Classifiers!
 # If you do change the License, remember to change the Trove Classifier for that!
-
-here = os.path.abspath(os.path.dirname(__file__))
 
 # Import the README and use it as the long-description.
 # Note: this will only work if 'README.md' is present in your MANIFEST.in file!
@@ -120,12 +128,13 @@ setup(
         'License :: OSI Approved :: MIT License',
         'Programming Language :: Python',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.9',
         'Programming Language :: Python :: Implementation :: CPython',
         'Programming Language :: Python :: Implementation :: PyPy'
     ],
     # $ setup.py publish support.
     cmdclass={
         'upload': UploadCommand,
-    dependency_links=['https://github.com/harsh543/False-Posts.git']    
     },
+    dependency_links=['https://github.com/harsh543/False-Posts.git']
+)
