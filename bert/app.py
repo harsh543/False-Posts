@@ -73,15 +73,12 @@ if __name__ == "__main__":
 
     checkpoint = torch.load(config.MODEL_PATH, map_location=map_location)
     state_dict = checkpoint.get("state_dict", checkpoint)
-    try:
-        MODEL.load_state_dict(state_dict)
-    except RuntimeError:
-        MODEL.module.load_state_dict(
-            {
-                key.replace("module.", "", 1): value
-                for key, value in state_dict.items()
-            }
-        )
+    if any(key.startswith("module.") for key in state_dict):
+        state_dict = {
+            key.replace("module.", "", 1): value
+            for key, value in state_dict.items()
+        }
+    MODEL.module.load_state_dict(state_dict)
     MODEL.to(DEVICE)
     MODEL.eval()
     app.run()
