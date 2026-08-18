@@ -70,8 +70,18 @@ if __name__ == "__main__":
       map_location = lambda storage, loc: storage.cuda()
     else:
       map_location = 'cpu'
-    
-    MODEL.load_state_dict(torch.load(config.MODEL_PATH, map_location))
+
+    checkpoint = torch.load(config.MODEL_PATH, map_location=map_location)
+    state_dict = checkpoint.get("state_dict", checkpoint)
+    try:
+        MODEL.load_state_dict(state_dict)
+    except RuntimeError:
+        MODEL.module.load_state_dict(
+            {
+                key.replace("module.", "", 1): value
+                for key, value in state_dict.items()
+            }
+        )
     MODEL.to(DEVICE)
     MODEL.eval()
     app.run()
